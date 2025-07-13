@@ -22,7 +22,7 @@ pipeline {
                     sh '''
                     ls
                     echo 'Buid Docker Image'
-                    cd jenkins-projects/python-jenkins-argocd-k8s
+                    cd python-jenkins-argocd-k8s
                     docker build -t devopswithdj/todo-app:${BUILD_NUMBER} .
                     '''
                 }
@@ -53,7 +53,7 @@ pipeline {
                 script{
                     withCredentials([usernamePassword(credentialsId: 'devopswithdj', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
-                        cd jenkins-projects/python-jenkins-argocd-k8s
+                        cd python-jenkins-argocd-k8s
                         cat deploy.yaml
                         sed -i '' "s/32/${BUILD_NUMBER}/g" deploy.yaml
                         cat deploy.yaml
