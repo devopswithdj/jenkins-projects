@@ -19,12 +19,14 @@ pipeline {
         stage('Build Docker'){
             steps{
                 script{
-                    sh '''
-                    ls
-                    echo 'Buid Docker Image'
-                    cd python-jenkins-argocd-k8s
-                    docker build -t devopswithdj/todo-app:${BUILD_NUMBER} .
-                    '''
+                    withDockerRegistry(credentialsId: 'devopswithdj'){
+                        sh '''
+                        ls
+                        echo 'Buid Docker Image'
+                        cd python-jenkins-argocd-k8s
+                        docker build -t devopswithdj/todo-app:${BUILD_NUMBER} .
+                        '''
+                    }
                 }
             }
         }
@@ -32,10 +34,12 @@ pipeline {
         stage('Push the artifacts'){
            steps{
                 script{
-                    sh '''
-                    echo 'Push to Repo'
-                    docker push devopswithdj/todo-app:${BUILD_NUMBER}
-                    '''
+                    withDockerRegistry(credentialsId: 'devopswithdj') {
+                        sh '''
+                        echo 'Push to Repo'
+                        docker push devopswithdj/todo-app:${BUILD_NUMBER}
+                        '''
+                    }
                 }
             }
         }
